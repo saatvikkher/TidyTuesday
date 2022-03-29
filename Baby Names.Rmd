@@ -1,0 +1,76 @@
+---
+title: "Baby Names"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(showtext)
+library(tidytuesdayR)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(mosaic)
+library(broom)
+library(janitor)
+library(wordcloud)
+library(RColorBrewer)
+library(wordcloud2)
+
+tuesdata <- tidytuesdayR::tt_load('2022-03-22')
+babynames <- tuesdata$babynames
+```
+
+```{r}
+df <- babynames %>%
+  janitor::clean_names() %>%
+  group_by(name) %>%
+  summarise(n=sum(n)) %>%
+  arrange(-n) %>%
+  ungroup()
+
+dfwomen <- babynames %>%
+  filter(sex=="F") %>%
+  group_by(name) %>%
+  summarise(n=sum(n)) %>%
+  arrange(-n) %>%
+  ungroup()
+
+set.seed(123)
+
+wordcloud2(df)
+wordcloud2(dfwomen)
+```
+
+
+```{r}
+letters <- babynames %>%
+  mutate(firstLetter = substr(name, 1, 1)) %>%
+  group_by(firstLetter) %>%
+  summarise(count=sum(n)) %>%
+  ungroup()
+
+letters %>% ggplot(aes(x=firstLetter, y=count, fill=count)) +
+  geom_col(stat='identity') +
+  theme(legend.position="none") +
+  scale_fill_viridis_c()
+```
+```{r}
+top_10 <- babynames %>%
+  group_by(name) %>%
+  summarise(count=sum(n)) %>%
+  arrange(-count) %>%
+  slice(1:10)
+
+top_year <- babynames %>% 
+  filter(name=="John"| name=="James" | name=="Robert" | name=="Michael" | name=="Mary" | name=="William" | name=="David" | name=="Joseph" | name=="Richard"| name=="Charles") %>%
+  arrange(-n) %>%
+  ggplot(aes(x=year,y=as.integer(n), color=n)) +
+  geom_line() + 
+  theme(legend.position="none") +
+  facet_wrap(~name)
+
+top_year
+```
+
