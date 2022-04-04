@@ -1,0 +1,91 @@
+---
+title: "Collegiate Sports"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+library(showtext)
+library(tidytuesdayR)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(mosaic)
+library(broom)
+library(janitor)
+library(wordcloud)
+library(RColorBrewer)
+library(wordcloud2)
+
+tuesdata <- tidytuesdayR::tt_load('2022-03-29')
+sports <- tuesdata$sports %>%
+  janitor::clean_names()
+remove(tuesdata)
+```
+
+
+```{r}
+library(GGally)
+
+sports %>% select(year, classification_code, partic_men, partic_women, rev_men, rev_women, exp_men, exp_women) %>%
+ggpairs(lower = list(continuous = wrap("points", size = 0.1)))
+```
+```{r}
+sports <- sports %>% mutate(log_rev_men = log10(rev_men+1),
+                            log_rev_women = log10(rev_women+1))
+
+sports %>% drop_na(log_rev_men, log_rev_women) %>%
+  lm(log_rev_women ~ log_rev_men, data = .)  %>%
+  tidy()
+```
+
+
+```{r}
+sports %>%
+  filter(sports == c("Soccer", "Tennis", "Basketball")) %>%
+  ggplot(aes(x = log_rev_men, y = log_rev_women)) +
+  geom_point(alpha=0.6, aes(colour = sports)) +
+  geom_smooth(method = lm, se = FALSE, color = "Blue") + 
+  geom_abline(intercept=0,slope=1, color = "Red", size = 1.2) + 
+  facet_wrap(~sports)
+```
+
+```{r}
+sports %>%
+  filter(sports == "Basketball") %>%
+  ggplot(aes(x = log_rev_men, y = log_rev_women)) +
+  geom_point(alpha=0.8) +
+  geom_smooth(
+    method = "lm",
+    formula = "y ~ x + I(x^2)",
+    se = FALSE
+  ) +
+  geom_abline(intercept=0,slope=1, color = "Red", size = 1.2)
+  #geom_smooth(se = FALSE, color = "green")
+```
+
+Comparing a linear model vs quadratic model
+
+
+```{r}
+sports %>% drop_na(log_rev_men, log_rev_women) %>%
+  filter(sports == "Basketball") %>%
+  lm(log_rev_women ~ log_rev_men, data = .)  %>%
+  tidy()
+```
+```{r}
+sports %>% drop_na(log_rev_men, log_rev_women) %>%
+  filter(sports == "Basketball") %>%
+  lm(log_rev_women ~ log_rev_men + I(log_rev_men^2), data = .)  %>%
+  tidy()
+```
+
+```{r}
+sports_uni_grouped <- sports %>%
+  group_by(institution_name) %>%
+  summarise(sum(rev_women), sum(rev_men))
+```
+
+
