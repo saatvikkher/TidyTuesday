@@ -52,24 +52,6 @@ p_host <- ggplot(country_map, aes(x=long, y=lat, group=group)) +
 
 ```{r, include=FALSE}
 
-# Trying Animations. Failed. 
-countries2 <- eurovision %>% 
-  group_by(year) %>% 
-  summarise(first(host_country)) %>% 
-  rename(country = "first(host_country)")
-
-country_map2 <- countries2 %>%
-  left_join(world, by = c('country' = 'region')) %>%
-  filter(!is.na(lat))
-
-p <-
-  ggplot(country_map2, aes(x=long, y=lat, group=group)) +
-  geom_polygon(color = "black") +
-  theme_fivethirtyeight() +
-  scale_fill_viridis_c() +
-  transition_states(year,
-                    transition_length = 2,
-                    state_length = 1) 
 ```
 
 
