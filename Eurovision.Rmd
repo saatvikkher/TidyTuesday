@@ -50,11 +50,6 @@ p_host <- ggplot(country_map, aes(x=long, y=lat, group=group)) +
 
 
 
-```{r, include=FALSE}
-
-```
-
-
 ```{r}
 win_countries <- eurovision %>% 
   filter(winner == TRUE & (section == "final" | section == "grand-final")) %>%
