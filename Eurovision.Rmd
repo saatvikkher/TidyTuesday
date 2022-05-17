@@ -1,0 +1,100 @@
+---
+title: "Eurovision"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list = ls())
+
+
+library(tidyverse)
+library(dplyr)
+library(ggthemes)
+library(broom)
+library(maps)
+library(mapdata)
+library(gganimate)
+library(ggrepel)
+library(gifski)
+library(png)
+
+
+tuesdata <- tidytuesdayR::tt_load(2022, week = 20)
+eurovision <- tuesdata$eurovision
+
+rm(tuesdata)
+```
+
+
+```{r}
+countries <- eurovision %>% 
+  group_by(year) %>% 
+  summarise(first(host_country)) %>% 
+  rename(country = "first(host_country)")%>% 
+  count(country) %>% arrange(-n)
+
+world <- map_data("world") %>%   filter(region != "Antarctica") 
+
+world$region <- recode(world$region, "UK" = "United Kingdom")
+
+country_map <- countries %>%
+  left_join(world, by = c('country' = 'region')) %>%
+  filter(!is.na(lat))
+
+p_host <- ggplot(country_map, aes(x=long, y=lat, group=group)) +
+  geom_polygon(aes(fill=n), color = "black") +
+  theme_fivethirtyeight() +
+  scale_fill_viridis_c()
+```
+
+
+
+```{r, include=FALSE}
+
+# Trying Animations. Failed. 
+countries2 <- eurovision %>% 
+  group_by(year) %>% 
+  summarise(first(host_country)) %>% 
+  rename(country = "first(host_country)")
+
+country_map2 <- countries2 %>%
+  left_join(world, by = c('country' = 'region')) %>%
+  filter(!is.na(lat))
+
+p <-
+  ggplot(country_map2, aes(x=long, y=lat, group=group)) +
+  geom_polygon(color = "black") +
+  theme_fivethirtyeight() +
+  scale_fill_viridis_c() +
+  transition_states(year,
+                    transition_length = 2,
+                    state_length = 1) 
+```
+
+
+```{r}
+win_countries <- eurovision %>% 
+  filter(winner == TRUE & (section == "final" | section == "grand-final")) %>%
+  filter(artist_country != "Yugoslavia") %>%
+  filter(host_country != "Yugoslavia") %>%
+  select(year, host_country, artist_country) %>%
+  mutate(same = ifelse(host_country == artist_country, TRUE, FALSE)) %>%
+  pivot_longer(host_country:artist_country, names_to = "type", values_to = "country")
+
+country_map3 <- win_countries %>%
+  left_join(world, by = c('country' = 'region')) %>%
+  filter(!is.na(lat))
+
+graph <- ggplot(country_map3, aes(x=long, y=lat, group=group)) +
+  geom_polygon(aes(fill = ifelse(same, "green", type)), color = "black") +
+  theme_fivethirtyeight() +
+  theme(legend.title=element_blank())
+
+anim = graph +
+  transition_time(year) +
+  labs(subtitle = "Year: {as.integer(frame_time)}")
+
+animate(anim, height = 600, width = 1200, nframes = 67, fps=3, res = 100)
+```
+

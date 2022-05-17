@@ -1,0 +1,38 @@
+---
+title: "US Solar/Wind"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidytuesdayR)
+library(tidyverse)
+library(ggplot2)
+
+capacity <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-03/capacity.csv')
+wind <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-03/wind.csv')
+solar <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-03/solar.csv')
+average_cost <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-03/average_cost.csv')
+
+theme_set(theme_minimal())
+```
+
+
+```{r}
+wind %>% ggplot(aes(wind_capacity, wind_mwh)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+```{r}
+solar %>% ggplot(aes(solar_capacity, solar_mwh)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+capacity %>% 
+  ggplot(aes(year, total_gw, fill = type)) +
+  geom_col()
+```
+

@@ -1,0 +1,76 @@
+---
+title: "Crossword Puzzles"
+output: html_document
+author: saatvikkher
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidytext)
+library(keras)
+library(lubridate)
+library(waffle)
+
+
+tuesdata <- tidytuesdayR::tt_load('2022-04-19')
+big_dave <- tuesdata$big_dave
+times <- tuesdata$times
+
+```
+
+
+
+```{r, include=FALSE}
+big_dave %>% summary()
+
+data(stop_words)
+afinn_df <- get_sentiments("afinn")
+
+text_df <- times %>% 
+  select(puzzle_date, answer) %>% 
+  unnest_tokens(word, answer) %>% 
+  anti_join(stop_words, by = "word")
+
+sent_df <- text_df %>% 
+  inner_join(afinn_df, by = "word") %>% 
+  group_by(puzzle_date) %>% 
+  summarise(mean_sent = mean(value, na.rm = T)) %>% 
+  drop_na() %>% 
+  filter(puzzle_date > dmy("01012014"))
+```
+
+
+```{r}
+sent_df %>% 
+  ggplot(aes(x = puzzle_date, y = mean_sent)) +
+  geom_bar(stat='identity')
+```
+
+
+```{r}
+nrc_df <- get_sentiments("nrc")
+
+nrc_text_df <- times %>% 
+  select(puzzle_date, answer) %>% 
+  unnest_tokens(word, answer) %>% 
+  anti_join(stop_words, by = "word")
+
+ent_df <- text_df %>% 
+  inner_join(nrc_df, by = "word") %>%
+  group_by(sentiment) %>%
+  summarise(n = n())
+
+ent_df %>% 
+  ggplot(aes(x=sentiment, y=n)) +
+  geom_col()
+```
+
+```{r}
+waf_plot <- ent_df %>%
+  ggplot(aes(fill=sentiment, values=n)) +
+  geom_waffle(n_rows = 100, flip = TRUE)
+
+waf_plot
+```
+

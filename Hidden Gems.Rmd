@@ -1,0 +1,31 @@
+---
+title: "Hidden Gems"
+author: "Saatvik Kher"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+rm(list = ls())
+
+tuesdata <- tidytuesdayR::tt_load(2022, week = 17)
+hidden_gems <- tuesdata$hidden_gems
+rm(tuesdata)
+
+theme_set(theme_minimal())
+```
+
+```{r}
+hidden_gems <- hidden_gems %>% mutate(num_words = lengths(gregexpr("\\W+", title)) + 1)
+
+hidden_gems %>% ggplot(aes(x=vol, y=num_words, fill = vol)) + 
+  geom_col(position = "dodge", width = 1) +
+  scale_fill_gradient(low = "#E26D5C", high = "#472D30") +
+  scale_color_gradient(low = "#E26D5C", high = "#472D30")
+```
+
+```{r}
+hidden_gems %>% select(num_words) %>% summary()
+```
+
