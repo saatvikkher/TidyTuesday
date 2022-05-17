@@ -87,14 +87,27 @@ country_map3 <- win_countries %>%
   filter(!is.na(lat))
 
 graph <- ggplot(country_map3, aes(x=long, y=lat, group=group)) +
-  geom_polygon(aes(fill = ifelse(same, "green", type)), color = "black") +
+  geom_polygon(aes(fill = ifelse(same, "Same", type)), color = "black", size = 0.3) +
   theme_fivethirtyeight() +
-  theme(legend.title=element_blank())
+  scale_fill_manual(labels = c("Winner Country", "Host Country", "Host Country Wins!"), 
+                    values = c("#C2948A", "#7EA8BE", "#50CBAE")) +
+  theme(axis.title.x=element_blank(),
+        legend.title=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
+  ggtitle("Host and Winner Country")
+
 
 anim = graph +
   transition_time(year) +
   labs(subtitle = "Year: {as.integer(frame_time)}")
 
-animate(anim, height = 600, width = 1200, nframes = 67, fps=3, res = 100)
+animate(anim, height = 600, width = 1200, duration = 50, end_pause = 10)
 ```
 
