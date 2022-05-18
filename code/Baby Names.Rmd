@@ -66,11 +66,18 @@ top_10 <- babynames %>%
 top_year <- babynames %>% 
   filter(name=="John"| name=="James" | name=="Robert" | name=="Michael" | name=="Mary" | name=="William" | name=="David" | name=="Joseph" | name=="Richard"| name=="Charles") %>%
   arrange(-n) %>%
-  ggplot(aes(x=year,y=as.integer(n), color=n)) +
-  geom_line() + 
+  ggplot(aes(x=year,y=n)) +
+  geom_smooth(se = FALSE, color = "#B8F2E6") + 
   theme(legend.position="none") +
-  facet_wrap(~name)
+  facet_wrap(~name, nrow = 2) +
+  theme_fivethirtyeight() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
+      ggtitle("Popularity of Top 10 Baby Names", subtitle = "Historically popular names have lost popularity")
 
 top_year
+
+ggsave(file="babynames.svg", plot = top_year)
 ```
 
