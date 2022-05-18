@@ -86,5 +86,7 @@ anim = graph +
   labs(subtitle = "Year: {as.integer(frame_time)}")
 
 animate(anim, height = 600, width = 1200, duration = 50, end_pause = 10)
+
+anim_save("Eurovision.gif")
 ```
 
