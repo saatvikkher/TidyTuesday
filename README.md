@@ -17,14 +17,14 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
   - [Crossword Puzzles and Clues]()
   - [Kaggle Hidden Gems]()
   - [Solar/Wind utilities]()
-  - [Eurovision]()
+  - [Eurovision](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
 <!-- tocstop -->
 
 
 ***
 
-### [2022/09 Alternative Fuel Stations]()
+### [2022/20 Eurovision](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
 
-![]()
+![plots/Eurovision.gif](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
 
 ***
