@@ -10,7 +10,7 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
 
 
 <!-- toc -->
-* **2022**
+<!-- * **2022**
   - [Alternative Fuel Stations](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/alternativefuelstation.png)
   - [Baby Names](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/Babynames.png)
   - Collegiate Sports Budgets
@@ -18,7 +18,7 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
   - Kaggle Hidden Gems
   - Solar/Wind utilities
   - [Eurovision](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
-<!-- tocstop -->
+ -->
 
 
 ***
