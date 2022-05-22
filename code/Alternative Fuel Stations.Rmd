@@ -15,49 +15,38 @@ library(patchwork)
 library(mosaic)
 library(broom)
 library(janitor)
+library(plotly)
 
 tuesdata <- tidytuesdayR::tt_load('2022-03-01')
 stations <- tuesdata$stations
 rm(tuesdata)
 ```
 
-```{r}
-us_states <- tibble(
-  state_name = state.name,
-  state_abb = state.abb)
-
-stations <- stations %>%
-  janitor::clean_names()
-
-stations <- stations %>% 
-  filter(fuel_type_code == "ELEC",
-         status_code == "E") %>% 
-  count(state) %>% 
-  rename(state_abb = state, total = n) %>% 
-  left_join(us_states) %>%
-  mutate(state_name = tolower(state_name)) %>% 
-  select(state_name, total) %>% 
-  mutate(bin = case_when(total <= 1000 ~ "0-1000",
-                         total > 1000 & total <= 2000 ~ "1000-2000",
-                         total > 2000 & total <= 3000 ~ "2000-3000",
-                         total > 3000 ~ "3000+"))
-```
 
 ```{r}
-us_elec_stations <- map_data("state") %>% 
-  left_join(stations, by = c("region" = "state_name"))
+latlong <- stations %>% select(LATITUDE, LONGITUDE, FUEL_TYPE_CODE)
 
-us_map <- ggplot(data = us_elec_stations,
-       mapping = aes(x = long, y = lat, group = group,
-                     fill = bin)) +
-  geom_polygon(colour = "black") +
-  ggtitle("Electric car charging stations in the U.S.") +
-  guides(fill=guide_legend(title="Count"))
-us_map
+latlong %>% count(FUEL_TYPE_CODE)
+
+geo_properties = list(
+  scope = "usa",
+  projection = list(type = "albers usa"),
+  showland = TRUE,
+  showsubunits = TRUE,
+  landcolor = toRGB("gray10"),
+  showlakes = TRUE,
+  lakecolor = toRGB("white")
+)
+
+stations_graph = plot_geo(latlong,
+                          lat = ~LATITUDE,
+                          lon = ~LONGITUDE,
+                          marker = list(size = 2, color = "#93E778", opacity = 0.25)) %>%
+  add_markers(hoverinfo = "none") %>%
+  config(displayModeBar = FALSE) %>%
+  layout(geo = geo_properties)
+                          
+
+stations_graph %>% save_image("alternativefuelstation.png")
+ 
 ```
-
-```{r}
-
-ggsave("Electric car charging stations.png", us_map, dpi = 320, width = 12, height = 6)
-```
-
