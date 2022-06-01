@@ -19,6 +19,13 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
   - Solar/Wind utilities
   - [Eurovision](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
  -->
+ 
+ 
+***
+
+### [2022/20 Company Reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
+
+![plots/reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
 
 
 ***
