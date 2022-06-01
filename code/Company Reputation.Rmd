@@ -1,0 +1,81 @@
+---
+title: "Company Reputation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggthemes)
+library(broom)
+library(lubridate)
+library(ggplot2)
+library(ggradar)
+library(tibble)
+library(scales)
+
+
+poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv')
+reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
+```
+
+
+
+```{r}
+radar_df <- reputation %>% 
+  select(company, name, score) %>%
+  mutate_at(vars(-company, -name), rescale) %>%
+  mutate(company = case_when(company == "Amazon.com" ~ "Amazon",
+                             TRUE ~ company)) %>%
+  filter(company %in% c("Amazon", "Trader Joe's", "Apple", "Facebook", "Google", "Netflix")) %>%
+  pivot_wider(id_cols = company, names_from = name, values_from = score)
+  
+
+
+
+faang_p <- radar_df %>%
+  ggradar(label.gridline.min = FALSE,
+          label.gridline.mid = FALSE,
+          label.gridline.max = FALSE,
+          fill = TRUE,
+          fill.alpha = 0.5,
+          group.line.width = 1,
+          group.point.size = 0,
+          background.circle.colour = "#FFF8E9",
+          background.circle.transparency = 100) +
+  facet_wrap(~group) +
+  theme(legend.position = "none")
+
+faang_p
+
+ggsave(plot = faang_p, file = "reputation.svg", width = 20, height = 15)
+```
+
+
+```{r}
+reputation %>% group_by(industry, name) %>% summarise(mean(score)) %>%
+  rename(score = `mean(score)`) %>%
+  mutate_at(vars(-industry, -name), rescale) %>%
+  pivot_wider(id_cols = industry, names_from = name, values_from = score) %>%
+  filter(industry %in% c("Healthcare", "Tech", "Retail", "Energy", "Food & Beverage", "Media")) %>%
+  ggradar(label.gridline.min = FALSE,
+          label.gridline.mid = FALSE,
+          label.gridline.max = FALSE,
+          fill = TRUE,
+          fill.alpha = 0.5,
+          group.line.width = 1,
+          group.point.size = 0,
+          background.circle.colour = "#FFF8E9",
+          background.circle.transparency = 100) +
+  facet_wrap(~group) +
+  theme(legend.position = "none")
+```
+
+
+```{r}
+poll
+```
+
+
