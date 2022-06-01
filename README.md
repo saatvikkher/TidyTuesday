@@ -23,7 +23,7 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
  
 ***
 
-### [2022/20 Company Reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
+### [2022/22 Company Reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
 
 ![plots/reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
 
