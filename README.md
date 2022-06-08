@@ -20,12 +20,17 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
   - [Eurovision](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
  -->
  
+***
+
+### [2022/23 Pride Donations](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/pride.png)
+
+![plots/pride.png](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/pride.png)
  
 ***
 
 ### [2022/22 Company Reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
 
-![plots/reputation](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
+![plots/reputation.png](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/reputation.png)
 
 
 ***
