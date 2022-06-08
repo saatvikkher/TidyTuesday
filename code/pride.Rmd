@@ -1,0 +1,82 @@
+---
+title: "Pride Donations"
+author: "Saatvik Kher"
+date: '2022-06-07'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggthemes)
+library(broom)
+library(lubridate)
+library(ggplot2)
+library(tibble)
+library(scales)
+library(usmap)
+library(ggrepel)
+
+pride_aggregates <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/pride_aggregates.csv')
+fortune_aggregates <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/fortune_aggregates.csv')
+static_list <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/static_list.csv')
+pride_sponsors <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/pride_sponsors.csv')
+corp_by_politicians <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/corp_by_politician.csv')
+donors <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-06-07/donors.csv')
+
+```
+
+
+Creating a state map
+
+```{r}
+states <- corp_by_politicians %>% 
+  filter(Politician != "Grand Total") %>%
+  count(State) %>%
+  arrange(-n) %>%
+  rename(state = State, value = n) 
+
+state_names <- states %>% select(state) %>% pull()
+
+label_plot <- plot_usmap(include = state_names, data = states, values = "value", labels = TRUE) +
+  scale_fill_continuous(na.value = alpha("#F2FBE0", 0.3), low = "#DAFEB7", high = "#758757") +
+  theme(legend.position = "none")
+
+
+plot_usmap(data = states, values = "value") +
+  scale_fill_continuous(na.value = alpha("#F2FBE0", 0.3), low = "#DAFEB7", high = "#758757") +
+  theme(legend.position = "none")
+  
+
+label_plot
+
+
+ggsave(plot = label_plot, file = "label.svg", width = 20, height = 15)
+ggsave(plot = no_label, file = "no_label.svg", width = 20, height = 15)
+```
+
+
+
+```{r}
+top4 <- corp_by_politicians %>% rename(amount = `SUM of Amount`, politician = Politician) %>% arrange(-amount) %>% filter(politician != "Grand Total") %>% slice(1:4) %>% select(politician, amount) %>% mutate(top4 = "top4")
+
+top4
+
+top4 %>% ggplot(aes(x = top4, y = amount, fill = politician)) +
+  geom_col() +
+  theme_minimal() +
+  geom_text(aes(label = politician), hjust = -2) +
+  geom_text(aes(label = round(amount), hjust = 2)) +
+  theme(panel.grid = element_blank())
+
+ggsave(plot = raw_bar, file = "politicians.svg", width = 15, height = 15)
+```
+
+
+```{r}
+corp_by_politicians %>% rename(amount = `SUM of Amount`, politician = Politician) %>% arrange(-amount) %>% filter(politician != "Grand Total") %>% slice(1:4) %>% select(politician, amount) %>% mutate(top4 = "top4") %>% arrange(amount) %>% select(politician) %>% pull()
+```
+
+
+
