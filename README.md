@@ -4,7 +4,7 @@
 
 </div>
 
-Every week, I try to contribute to the [#TidyTuesday challenge](https://github.com/rfordatascience/tidytuesday). to practise my data wrangling and vizualization skills.
+Every week, I try to contribute to the [#TidyTuesday challenge](https://github.com/rfordatascience/tidytuesday) to practise my data wrangling and vizualization skills.
 
 </div>
 
