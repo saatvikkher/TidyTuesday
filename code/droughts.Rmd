@@ -204,7 +204,7 @@ sw_sweep(fcast_ets) %>%
     geom_ribbon(aes(ymin = lo.80, ymax = hi.80, fill = key),
                 fill = "#596DD5", color = NA, size = 0, alpha = 0.8) +
     geom_line(size = 1) +
-    labs(title = "US Alcohol Sales, ETS Model Forecast", x = "", y = "DSCI",
+    labs(title = "LA County Droughts, ETS Model Forecast", x = "", y = "DSCI",
          subtitle = "Regular Time Index") +
     scale_x_yearmon(n = 12, format = "%Y") +
     scale_color_tq() +
@@ -212,10 +212,25 @@ sw_sweep(fcast_ets) %>%
     theme_tq()
 ```
 
-
-# ARIMA?
+# Predict 2020 - 2022?
 
 ```{r}
-LA_ts %>% Arima()
+LA_m %>% head(250) %>%
+  select(date, DSCI) %>% 
+  tk_ts(start = 2000, freq = 12, silent = TRUE) %>% 
+  forecast(h = 12) %>% 
+  sw_sweep() %>%
+  ggplot(aes(x = index, y = DSCI, color = key)) +
+    geom_ribbon(aes(ymin = lo.95, ymax = hi.95),
+                fill = "#D5DBFF", color = NA, size = 0) +
+    geom_ribbon(aes(ymin = lo.80, ymax = hi.80, fill = key),
+                fill = "#596DD5", color = NA, size = 0, alpha = 0.8) +
+    geom_line(size = 1) +
+    labs(title = "LA County Droughts, ETS Model Forecast", x = "", y = "DSCI",
+         subtitle = "Regular Time Index") +
+    scale_x_yearmon(n = 12, format = "%Y") +
+    scale_color_tq() +
+    scale_fill_tq() +
+    theme_tq()
 ```
 
