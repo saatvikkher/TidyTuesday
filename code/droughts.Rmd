@@ -202,14 +202,16 @@ ets_forecast <- sw_sweep(fcast_ets) %>%
     geom_ribbon(aes(ymin = lo.80, ymax = hi.80, fill = key),
                 fill = "#596DD5", color = NA, size = 0, alpha = 0.8) +
     geom_line(size = 1) +
-    labs(title = "LA County Droughts, ETS Model Forecast", x = "", y = "DSCI",
-         subtitle = "Regular Time Index") +
+    labs(title = "LA County Droughts, ETS Model Forecast", x = "", y = "DSCI") +
     scale_x_yearmon(n = 12, format = "%Y") +
     scale_color_tq() +
     scale_fill_tq() +
-    theme_tq()
+    theme_tq() +
+  theme(plot.title = element_text(size = 20))
 
-ggsave(plot = ets_forecast, file = "ets_forecast.png")
+ets_forecast
+
+ggsave(plot = ets_forecast, file = "ets_forecast.png", width = 10)
 ```
 
 # Predict 2020 - 2022?
