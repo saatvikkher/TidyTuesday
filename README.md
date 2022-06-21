@@ -19,7 +19,13 @@ Every week, I try to contribute to the [#TidyTuesday challenge](https://github.c
   - Solar/Wind utilities
   - [Eurovision](https://github.com/saatvikkher/TidyTuesday/blob/24aa21ab4e5acf97d83b093da5f9867c26ca36a7/plots/Eurovision.gif)
  -->
- 
+
+***
+
+### [2022/24 US Droughts](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/ets_forecast.png)
+
+![plots/ets_forecast.png](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/ets_forecast.png)
+
 ***
 
 ### [2022/23 Pride Donations](https://github.com/saatvikkher/TidyTuesday/blob/main/plots/pride.png)
