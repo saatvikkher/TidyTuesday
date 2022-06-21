@@ -209,7 +209,7 @@ ets_forecast <- sw_sweep(fcast_ets) %>%
     scale_fill_tq() +
     theme_tq()
 
-ggsave(plot = ets_forecast, file = "ets_forecast.png", width = 20, height = 15)
+ggsave(plot = ets_forecast, file = "ets_forecast.png")
 ```
 
 # Predict 2020 - 2022?
