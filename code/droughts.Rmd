@@ -18,8 +18,6 @@ library(sweep)
 library(forecast)
 library(timetk)
 library(tidyquant)
-
-theme_set(theme_light())
 ```
 
 
@@ -197,7 +195,7 @@ sw_sweep(fcast_ets, fitted = TRUE)
 ```
 
 ```{r}
-sw_sweep(fcast_ets) %>%
+ets_forecast <- sw_sweep(fcast_ets) %>%
     ggplot(aes(x = index, y = DSCI, color = key)) +
     geom_ribbon(aes(ymin = lo.95, ymax = hi.95),
                 fill = "#D5DBFF", color = NA, size = 0) +
@@ -210,6 +208,8 @@ sw_sweep(fcast_ets) %>%
     scale_color_tq() +
     scale_fill_tq() +
     theme_tq()
+
+ggsave(plot = ets_forecast, file = "ets_forecast.png", width = 20, height = 15)
 ```
 
 # Predict 2020 - 2022?
